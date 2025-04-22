@@ -73,12 +73,18 @@ def get_data_by_id(item_id):
         logger.error(f"Error retrieving data by ID: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
-@app.route('/api/force-update', methods=['POST'])
+@app.route('/api/force-update', methods=['POST', 'GET'])
 def force_update():
     """API endpoint to force a data update"""
     try:
-        scheduler.run_scraper_now()
-        return jsonify({"status": "success", "message": "Data update initiated"})
+        # Run the scraper directly for immediate results
+        data = scraper.scrape_data()
+        data_store.update_data(data)
+        return jsonify({
+            "status": "success", 
+            "message": "Data update completed", 
+            "count": len(data)
+        })
     except Exception as e:
         logger.error(f"Error forcing data update: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
