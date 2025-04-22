@@ -71,14 +71,28 @@ class DataStore:
                 # Check various ways of matching the name or symbol
                 item_name = item.get('name', '')
                 item_symbol = item.get('symbol', '')
+                search_term = name.upper()
                 
                 # Direct match of symbol or name
-                if item_symbol.upper() == name.upper() or item_name.upper() == name.upper():
+                if item_symbol.upper() == search_term or item_name.upper() == search_term:
                     return item
-                    
-                # Check if the symbol is in the full company name or vice versa
-                elif (name.upper() in item_name.upper() or 
-                     (item_symbol and item_symbol.upper() in name.upper())):
+                
+                # For AKBNK vs Akbank match - special handling for Turkish bank abbreviations
+                if item_symbol.upper() == "AKBNK" and search_term in ["AKBANK", "AKBNK", "AKBAN"]:
+                    return item
+                if item_symbol.upper() == "GARAN" and search_term in ["GARANTI", "GARANTIBANK", "GARANTIBBVA"]:
+                    return item 
+                if item_symbol.upper() == "HALKB" and search_term in ["HALKBANK", "HALK"]:
+                    return item
+                if item_symbol.upper() == "ISCTR" and search_term in ["ISBANK", "IS", "İŞBANK", "İŞ"]:
+                    return item
+                if item_symbol.upper() == "VAKBN" and search_term in ["VAKIFBANK", "VAKIF"]:
+                    return item
+                if item_symbol.upper() == "YKBNK" and search_term in ["YAPIKREDI", "YAPI", "YKB"]:
+                    return item
+                
+                # Check if the full company name contains the search term
+                elif item_name and search_term in item_name.upper():
                     return item
             return None
     
