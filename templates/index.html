@@ -302,6 +302,17 @@
                 window.open(`/api/getDataByName/${itemName}`, '_blank');
             });
             
+            // Get bulk items button
+            document.getElementById('getBulkItemsBtn').addEventListener('click', function() {
+                const bulkItems = document.getElementById('bulkItemsInput').value.trim();
+                if (!bulkItems) {
+                    alert('Please enter comma-separated stock names or symbols');
+                    return;
+                }
+                
+                window.open(`/api/getBulkDataByNames?names=${encodeURIComponent(bulkItems)}`, '_blank');
+            });
+            
             // Initial status update
             updateStatus();
             
