@@ -6,7 +6,7 @@ packages = ["geckodriver", "jq", "openssl", "postgresql"]
 
 [deployment]
 deploymentTarget = "gce"
-run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+run = ["sh", "-c", "gunicorn --bind 0.0.0.0:5000 app:app"]
 
 [workflows]
 runButton = "Project"
