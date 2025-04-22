@@ -112,6 +112,18 @@
                         
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong>Get Data by Name/Symbol</strong>
+                                <code>GET /api/getDataByName/{name}</code>
+                            </div>
+                            <p>Returns a specific financial data item by its name or symbol (case insensitive).</p>
+                            <div class="input-group">
+                                <input type="text" id="itemNameInput" class="form-control" placeholder="Enter stock name or symbol (e.g., A1CAP, Akbank)">
+                                <button id="getItemByNameBtn" class="btn btn-outline-primary">Get Item</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
                                 <strong>Force Data Update</strong>
                                 <code>POST /api/force-update</code>
                             </div>
@@ -244,6 +256,17 @@
                 }
                 
                 window.open(`/api/data/${itemId}`, '_blank');
+            });
+            
+            // Get item by name button
+            document.getElementById('getItemByNameBtn').addEventListener('click', function() {
+                const itemName = document.getElementById('itemNameInput').value.trim();
+                if (!itemName) {
+                    alert('Please enter a stock name or symbol');
+                    return;
+                }
+                
+                window.open(`/api/getDataByName/${itemName}`, '_blank');
             });
             
             // Initial status update
