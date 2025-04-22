@@ -40,6 +40,115 @@
         }
       }
     },
+    "/api/getBulkDataByNames": {
+      "get": {
+        "summary": "Get multiple stocks by names/symbols",
+        "description": "Returns multiple financial data items by comma-separated names/symbols provided as a query parameter",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "names",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Comma-separated list of stock names or symbols (e.g., AKBNK,GARAN,ISCTR)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "integer"},
+                      "symbol": {"type": "string"},
+                      "name": {"type": "string"},
+                      "price": {"type": "string"},
+                      "timestamp": {"type": "string", "format": "date-time"}
+                    }
+                  }
+                },
+                "count": {"type": "integer"},
+                "requested": {"type": "integer"},
+                "missing": {"type": "integer"}
+              }
+            }
+          },
+          "400": {
+            "description": "No names provided",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "message": {"type": "string"}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Get multiple stocks by names/symbols (JSON body)",
+        "description": "Returns multiple financial data items by names/symbols provided in request body",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "symbols": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "description": "List of stock names or symbols"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "symbol": {"type": "string"},
+                      "name": {"type": "string"},
+                      "price": {"type": "string"}
+                    }
+                  }
+                },
+                "count": {"type": "integer"}
+              }
+            }
+          },
+          "400": {
+            "description": "No symbols provided",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "message": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/data/{id}": {
       "get": {
         "summary": "Get stock data by ID",

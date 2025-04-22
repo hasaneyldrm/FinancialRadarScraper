@@ -109,9 +109,40 @@ def get_data_by_name_explicit(name):
     except Exception as e:
         logger.error(f"Error retrieving data by name: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
+        
+@app.route('/api/getBulkDataByNames', methods=['GET'])
+def get_bulk_data_by_names_get():
+    """API endpoint to get multiple financial data items by comma-separated names/symbols"""
+    try:
+        # Get the comma-separated list of names from the 'names' query parameter
+        names_param = request.args.get('names', '')
+        if not names_param:
+            return jsonify({"status": "error", "message": "No names provided. Use 'names' query parameter with comma-separated values"}), 400
+            
+        # Split the names by comma and strip whitespace
+        names = [name.strip() for name in names_param.split(',')]
+        
+        # Get data for each name
+        results = []
+        for name in names:
+            item = data_store.get_by_name(name)
+            if item:
+                results.append(item)
+        
+        # Return results even if some names weren't found
+        return jsonify({
+            "status": "success", 
+            "data": results,
+            "count": len(results),
+            "requested": len(names),
+            "missing": len(names) - len(results)
+        })
+    except Exception as e:
+        logger.error(f"Error retrieving bulk data by names: {str(e)}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/getBulkDataByNames', methods=['POST'])
-def get_bulk_data_by_names():
+def get_bulk_data_by_names_post():
     """API endpoint to get multiple stocks data by names/symbols"""
     try:
         names = request.json.get('symbols', [])

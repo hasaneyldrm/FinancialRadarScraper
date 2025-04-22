@@ -81,6 +81,24 @@
             </div>
         </div>
 
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="mb-4">Developer Resources</h2>
+                <div class="card bg-dark">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center gap-4 flex-wrap">
+                            <a href="/api/docs" class="btn btn-primary btn-lg">
+                                <i class="fas fa-book me-2"></i>API Documentation
+                            </a>
+                            <a href="https://github.com/your-username/financial-data-scraper" class="btn btn-outline-light btn-lg">
+                                <i class="fab fa-github me-2"></i>GitHub Repository
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-10 mx-auto">
                 <div class="card bg-dark mb-4">
@@ -122,6 +140,18 @@
                             <div class="input-group">
                                 <input type="text" id="itemNameInput" class="form-control" placeholder="Enter stock name or symbol (e.g., A1CAP, Akbank)">
                                 <button id="getItemByNameBtn" class="btn btn-outline-primary">Get Item</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong>Get Multiple Stocks by Names/Symbols</strong>
+                                <code>GET /api/getBulkDataByNames?names=symbol1,symbol2,symbol3</code>
+                            </div>
+                            <p>Returns multiple financial data items by comma-separated names/symbols.</p>
+                            <div class="input-group">
+                                <input type="text" id="bulkItemsInput" class="form-control" placeholder="Enter comma-separated stock names or symbols (e.g., AKBNK,GARAN,ISCTR)">
+                                <button id="getBulkItemsBtn" class="btn btn-outline-primary">Get Items</button>
                             </div>
                         </div>
                         
