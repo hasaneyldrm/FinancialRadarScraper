@@ -43,7 +43,7 @@ def get_all_data():
         simplified_data = []
         for item in all_data:
             simplified_item = {
-                "name": item.get("symbol", ""),  # Using symbol as name
+                "name": item.get("name", ""),  # Using the full company name
                 "price": item.get("price", "")
                 # Icon is optional and not included in current data structure
             }
