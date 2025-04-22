@@ -39,7 +39,23 @@ def get_all_data():
     """API endpoint to get all financial data"""
     try:
         all_data = data_store.get_all()
-        return jsonify({"status": "success", "data": all_data, "count": len(all_data)})
+        # Create a simplified format as requested
+        simplified_data = []
+        for item in all_data:
+            simplified_item = {
+                "name": item.get("symbol", ""),  # Using symbol as name
+                "price": item.get("price", "")
+                # Icon is optional and not included in current data structure
+            }
+            simplified_data.append(simplified_item)
+        
+        # Return both the simplified and full data formats
+        return jsonify({
+            "status": "success", 
+            "data": simplified_data,  # Simplified format as requested
+            "full_data": all_data,    # Original full data
+            "count": len(all_data)
+        })
     except Exception as e:
         logger.error(f"Error retrieving all data: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
