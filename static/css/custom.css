@@ -1,0 +1,97 @@
+/* Custom styles for Financial Data Scraper */
+
+/* Improve table readability */
+.table {
+    font-size: 0.95rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+/* Card styling */
+.card {
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Code styling */
+code {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+pre {
+    border-radius: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* API card styling */
+.card-body div:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+/* Modal styling */
+.modal-content {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header, .modal-footer {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    padding: 0.4em 0.6em;
+}
+
+/* Better focus states */
+:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Improve spacing */
+.container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Status indicators */
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.status-indicator.active {
+    background-color: var(--bs-success);
+    box-shadow: 0 0 10px var(--bs-success);
+}
+
+.status-indicator.inactive {
+    background-color: var(--bs-danger);
+    box-shadow: 0 0 10px var(--bs-danger);
+}
