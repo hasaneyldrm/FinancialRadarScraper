@@ -2,64 +2,18 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Financial Data API",
-    "description": "API for retrieving financial data",
+    "title": "Turkish Financial Data API",
+    "description": "API for retrieving Turkish financial market data from fintables.com/radar",
     "version": "1.0.0"
   },
+  "basePath": "/",
+  "schemes": ["http", "https"],
   "paths": {
-    "/api/getDataByName/{name}": {
+    "/api/data": {
       "get": {
-        "summary": "Get single stock data",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "Stock symbol or name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {"type": "string"},
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "symbol": {"type": "string"},
-                    "name": {"type": "string"},
-                    "price": {"type": "string"}
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/getBulkDataByNames": {
-      "post": {
-        "summary": "Get multiple stocks data",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "symbols": {
-                  "type": "array",
-                  "items": {"type": "string"},
-                  "example": ["AKBNK", "SASAC", "GARANKO"]
-                }
-              }
-            }
-          }
-        ],
+        "summary": "Get all stock data",
+        "description": "Returns all financial data collected from the last scraping",
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Successful response",
@@ -72,13 +26,220 @@
                   "items": {
                     "type": "object",
                     "properties": {
+                      "id": {"type": "integer"},
                       "symbol": {"type": "string"},
                       "name": {"type": "string"},
-                      "price": {"type": "string"}
+                      "price": {"type": "string"},
+                      "timestamp": {"type": "string", "format": "date-time"}
                     }
                   }
-                },
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/data/{id}": {
+      "get": {
+        "summary": "Get stock data by ID",
+        "description": "Returns a specific financial data item by its ID",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Stock ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer"},
+                    "symbol": {"type": "string"},
+                    "name": {"type": "string"},
+                    "price": {"type": "string"},
+                    "timestamp": {"type": "string", "format": "date-time"}
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Item not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "message": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stock/{name}": {
+      "get": {
+        "summary": "Get stock data by name or symbol",
+        "description": "Returns a specific financial data item by its name or symbol",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Stock name or symbol"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer"},
+                    "symbol": {"type": "string"},
+                    "name": {"type": "string"},
+                    "price": {"type": "string"},
+                    "timestamp": {"type": "string", "format": "date-time"}
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Item not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "message": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/getDataByName/{name}": {
+      "get": {
+        "summary": "Get stock data by name or symbol (explicit API)",
+        "description": "Returns a specific financial data item by its name or symbol (case insensitive)",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Stock name or symbol"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer"},
+                    "symbol": {"type": "string"},
+                    "name": {"type": "string"},
+                    "price": {"type": "string"},
+                    "timestamp": {"type": "string", "format": "date-time"}
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Item not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "message": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/force-update": {
+      "get": {
+        "summary": "Force data update",
+        "description": "Triggers an immediate data update from the source website",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "message": {"type": "string"},
                 "count": {"type": "integer"}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Force data update",
+        "description": "Triggers an immediate data update from the source website",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "message": {"type": "string"},
+                "count": {"type": "integer"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/status": {
+      "get": {
+        "summary": "Get system status",
+        "description": "Returns information about the system status and last update time",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "last_update": {"type": "string", "format": "date-time"},
+                    "is_running": {"type": "boolean"},
+                    "next_update": {"type": "string", "format": "date-time"},
+                    "data_count": {"type": "integer"}
+                  }
+                }
               }
             }
           }
