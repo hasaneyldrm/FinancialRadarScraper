@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request, render_template
 from data_store import DataStore
 from scraper import FinancialScraper
 from scheduler import Scheduler
+from flask_swagger_ui import get_swaggerui_blueprint
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, 
@@ -13,6 +14,16 @@ logger = logging.getLogger(__name__)
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
+
+# Configure Swagger UI
+SWAGGER_URL = '/api/docs'
+API_URL = '/static/swagger.json'
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={'app_name': "Financial Data API"}
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 # Initialize data store
 data_store = DataStore()
@@ -97,6 +108,33 @@ def get_data_by_name_explicit(name):
             return jsonify({"status": "error", "message": f"Stock with name/symbol '{name}' not found"}), 404
     except Exception as e:
         logger.error(f"Error retrieving data by name: {str(e)}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/getBulkDataByNames', methods=['POST'])
+def get_bulk_data_by_names():
+    """API endpoint to get multiple stocks data by names/symbols"""
+    try:
+        names = request.json.get('symbols', [])
+        if not names:
+            return jsonify({"status": "error", "message": "No symbols provided"}), 400
+            
+        results = []
+        for name in names:
+            item = data_store.get_by_name(name)
+            if item:
+                results.append({
+                    "symbol": item.get("symbol"),
+                    "name": item.get("name"),
+                    "price": item.get("price")
+                })
+                
+        return jsonify({
+            "status": "success",
+            "data": results,
+            "count": len(results)
+        })
+    except Exception as e:
+        logger.error(f"Error retrieving bulk data: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/force-update', methods=['POST', 'GET'])

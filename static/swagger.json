@@ -1,0 +1,89 @@
+
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Financial Data API",
+    "description": "API for retrieving financial data",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/getDataByName/{name}": {
+      "get": {
+        "summary": "Get single stock data",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Stock symbol or name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "symbol": {"type": "string"},
+                    "name": {"type": "string"},
+                    "price": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/getBulkDataByNames": {
+      "post": {
+        "summary": "Get multiple stocks data",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "symbols": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "example": ["AKBNK", "SASAC", "GARANKO"]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {"type": "string"},
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "symbol": {"type": "string"},
+                      "name": {"type": "string"},
+                      "price": {"type": "string"}
+                    }
+                  }
+                },
+                "count": {"type": "integer"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
