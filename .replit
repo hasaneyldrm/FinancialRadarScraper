@@ -2,7 +2,7 @@ modules = ["python-3.11"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["geckodriver", "openssl", "postgresql", "jq"]
+packages = ["geckodriver", "jq", "openssl", "postgresql"]
 
 [deployment]
 deploymentTarget = "gce"
