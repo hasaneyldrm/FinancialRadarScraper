@@ -86,6 +86,19 @@ def get_data_by_name(name):
         logger.error(f"Error retrieving data by name: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/api/getDataByName/<string:name>', methods=['GET'])
+def get_data_by_name_explicit(name):
+    """Explicit API endpoint to get financial data by name/symbol"""
+    try:
+        item = data_store.get_by_name(name)
+        if item:
+            return jsonify({"status": "success", "data": item})
+        else:
+            return jsonify({"status": "error", "message": f"Stock with name/symbol '{name}' not found"}), 404
+    except Exception as e:
+        logger.error(f"Error retrieving data by name: {str(e)}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 @app.route('/api/force-update', methods=['POST', 'GET'])
 def force_update():
     """API endpoint to force a data update"""
