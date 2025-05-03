@@ -1,0 +1,1 @@
+bist anlık hisse senedi 
